@@ -1,0 +1,129 @@
+{
+  "title": "Search the Web",
+  "description": "Given a term, searches the Web for it and returns a list of links and descriptions that match.",
+  "version": "0.0.1",
+  "nodes": [
+    {
+      "type": "input",
+      "id": "input",
+      "configuration": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "title": "Search",
+              "examples": [],
+              "description": "The term to search the Web for"
+            }
+          },
+          "required": []
+        }
+      },
+      "metadata": {
+        "visual": {
+          "x": 14,
+          "y": 352
+        }
+      }
+    },
+    {
+      "type": "output",
+      "id": "output",
+      "configuration": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "json": {
+              "type": "object",
+              "title": "JSON",
+              "examples": []
+            }
+          },
+          "required": []
+        }
+      },
+      "metadata": {
+        "visual": {
+          "x": 594.9999999999999,
+          "y": 505
+        }
+      }
+    },
+    {
+      "id": "fetch-27da0eda",
+      "type": "fetch",
+      "metadata": {
+        "visual": {
+          "x": 568,
+          "y": 150.9999999999999
+        },
+        "title": "Scraping Bee",
+        "description": "Calling Scraping Bee to Get the Contents",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "method": "GET"
+      }
+    },
+    {
+      "id": "urlTemplate-77553e6f",
+      "type": "urlTemplate",
+      "configuration": {
+        "template": "https://app.scrapingbee.com/api/v1/store/google?api_key={SCRAPING_BEE_KEY}&search={search}&language=en&nb_results=30"
+      },
+      "metadata": {
+        "visual": {
+          "x": 270,
+          "y": 226
+        },
+        "title": "Scraping Bee API Template",
+        "logLevel": "debug"
+      }
+    },
+    {
+      "id": "secrets-197969de",
+      "type": "secrets",
+      "configuration": {
+        "keys": [
+          "SCRAPING_BEE_KEY"
+        ]
+      },
+      "metadata": {
+        "visual": {
+          "x": 25,
+          "y": 3.9999999999998863
+        },
+        "title": "Get API Key",
+        "description": "Asking for API Key",
+        "logLevel": "debug"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "urlTemplate-77553e6f",
+      "to": "fetch-27da0eda",
+      "out": "url",
+      "in": "url"
+    },
+    {
+      "from": "secrets-197969de",
+      "to": "urlTemplate-77553e6f",
+      "out": "SCRAPING_BEE_KEY",
+      "in": "SCRAPING_BEE_KEY"
+    },
+    {
+      "from": "input",
+      "to": "urlTemplate-77553e6f",
+      "out": "search",
+      "in": "search"
+    },
+    {
+      "from": "fetch-27da0eda",
+      "to": "output",
+      "out": "response",
+      "in": "json"
+    }
+  ]
+}
